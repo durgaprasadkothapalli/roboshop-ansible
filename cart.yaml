@@ -71,7 +71,7 @@
   #     msg: "product count: {{product_count}}"
 
   - name: load cart data
-    ansible.builtin.command: mongo --host mongodb.76sdaws.tech < /app/schema/cart.js
+    ansible.builtin.command: mongo --host mongodb.76sdaws.tech < /app/schema/cart.service
     when: product_count.stdout == "0" # keep double quotes
 
   - name: start and enable cart
