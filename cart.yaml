@@ -11,7 +11,7 @@
       name: nodejs 
       state: present
 
-  - name: create roboshop cart
+  - name: create roboshop user
     ansible.builtin.cart:
       name: roboshop
 
