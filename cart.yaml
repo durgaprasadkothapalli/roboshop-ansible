@@ -1,5 +1,4 @@
-
-- name:  cart
+- name: cart
   hosts: cart
   become: yes
   tasks:
@@ -49,30 +48,6 @@
   - name: deamon realod and start
     ansible.builtin.systemd_service:
       daemon_reload: true
-
-  # let's start after the data is loaded
-
-  - name: Copy mongodb repo
-    ansible.builtin.copy:
-      src: mongodb.repo
-      dest: /etc/yum.repos.d/mongodb.repo
-
-  - name: Install mongodb client
-    ansible.builtin.package:
-      name: mongodb-org-shell
-      state: present
-
-  - name: get the categories count
-    ansible.builtin.command:  mongo --host mongodb.76sdaws.tech --quiet --eval 'db = db.getSiblingDB("cart"); db.products.count()'
-    register: product_count
-
-  # - name: print the count
-  #   ansible.builtin.debug:
-  #     msg: "product count: {{product_count}}"
-
-  - name: load cart data
-    ansible.builtin.command: mongo --host mongodb.76sdaws.tech < /app/schema/cart.service
-    when: product_count.stdout == "0" # keep double quotes
 
   - name: start and enable cart
     ansible.builtin.service:
