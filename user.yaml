@@ -25,14 +25,14 @@
       path: /app
       state: directory
 
-  - name: download catalogue application
+  - name: download user application
     ansible.builtin.get_url:
       url: https://roboshop-builds.s3.amazonaws.com/user.zip
       dest: /tmp
 
-  - name: extract catalogue application
+  - name: extract user application
     ansible.builtin.unarchive:
-      src: /tmp/catalogue.zip
+      src: /tmp/user.zip
       dest: /app
       remote_src: yes
 
@@ -63,18 +63,18 @@
       state: present
 
   - name: get the categories count
-    ansible.builtin.command:  mongo --host mongodb.76sdaws.tech --quiet --eval 'db = db.getSiblingDB("catalogue"); db.products.count()'
+    ansible.builtin.command:  mongo --host mongodb.76sdaws.tech --quiet --eval 'db = db.getSiblingDB("user"); db.products.count()'
     register: product_count
 
   # - name: print the count
   #   ansible.builtin.debug:
   #     msg: "product count: {{product_count}}"
 
-  - name: load catalogue data
+  - name: load user data
     ansible.builtin.command: mongo --host mongodb.76sdaws.tech < /app/schema/user.js
     when: product_count.stdout == "0" # keep double quotes
 
-  - name: start and enable catalogue
+  - name: start and enable user
     ansible.builtin.service:
       name: user
       state: restarted
